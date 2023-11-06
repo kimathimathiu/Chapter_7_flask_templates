@@ -1,22 +1,33 @@
 from app import app
-from flask import render_template
+from flask import render_template, flash, redirect, url_for
+from app.forms import LoginForm, RegisterForm 
 
-
-
-@app.route('/login')
+@app.route('/login' , methods=['GET', 'POST'])
 def login():
    """login URL"""
-   return render_template ('login.html', title="Login")
+   form  = LoginForm()
+   if form.validate_on_submit():
+      flash(f'You are requesting to login in {form.username.data}')
+      return redirect (url_for ('shop'))
+
+   return render_template ('login.html', title='login', form=form)
 
 
-@app.route('/register')
+@app.route('/register' , methods=['GET', 'POST'])
 def register():
    """Register URL"""
-   return render_template ('register.html', title="Register")
+   form  = RegisterForm()
+   if form.validate_on_submit():
+      flash(f'You are requesting to login in {form.username.data}')
+      return redirect (url_for ('login'))
+
+   return render_template ('register.html', title="Register", form=form)
+   
 
 
 @app.route('/')
-@app.route('/shop')
+@app.route('/home')
 def shop():
    """ URL"""
    return render_template ('shop.html', title="Shop")
+
